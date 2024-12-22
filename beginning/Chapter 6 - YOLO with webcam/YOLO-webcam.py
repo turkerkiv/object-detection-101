@@ -25,6 +25,7 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
 
 while (True):
     success, img = cap.read() # Read frame from webcam
+    img = cv2.flip(img, 1) # Flip the img frame horizontally
     results = model(img, stream=True) # Show inferences on frame. stream=True means it will optimize it for real-time
     for r in results:
         boxes = r.boxes # Get the boxes from the results
@@ -41,10 +42,9 @@ while (True):
             conf = math.ceil((box.conf[0]*100))/100 # Get the confidence of the object
 
             # Class
-            cls = int(box.cls[0])
-            cvzone.putTextRect(img, f"{classNames[cls]} {conf}", (max(15,x1), max(45,y1-10)), 1, 1) # Put class and conf on the object
+            cls = int(box.cls[0]) # Get the class of the object
+            cvzone.putTextRect(img, f"{classNames[cls]} {conf}", (max(10,x1), max(20,y1-10)), 1, 1) # Put class and conf on the object
             
             
-    # img = cv2.flip(img, 1) # Flip the img frame horizontally
     cv2.imshow("Image", img) # Show the img frame from webcam
     cv2.waitKey(1) # Wait for 1ms before next frame
